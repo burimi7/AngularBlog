@@ -1,0 +1,19 @@
+<div class="wrapper ">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+      <h2> Simple Angular Blog <br/> Login </h2>
+  
+      <!-- Login Form -->
+      
+<div class="alert alert-danger" role="alert" *ngIf="LoginResult.length>0" (click)="LoginResult=''">
+    {{LoginResult}}        
+   </div>
+
+      <form>
+        <input type="text" id="login" class=" second" name="login" placeholder="login" [(ngModel)]="username">
+        <input type="text" id="password" class=" third" name="login" placeholder="password"  [(ngModel)]="password">
+        <input type="submit" class=" fourth" value="Log In" (click)="Login()">
+      </form>
+  
+    </div>
+  </div>
