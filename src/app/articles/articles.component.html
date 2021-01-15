@@ -1,0 +1,282 @@
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>edit</title>
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link href='http://fonts.googleapis.com/css?family=Nova+Mono' rel='stylesheet' type='text/css' />
+  <!-- <link href="../styles.scss" rel="stylesheet" type="text/css" media="screen" /> -->
+</head>
+
+<body>
+
+  <div id="wrapper">
+    <!-- <div id="header-wrapper"> -->
+      <div id="header">
+        <div id="logo">
+          <h1>Simple Angular Blog</h1>
+        </div>
+      </div>
+    <!-- </div> -->
+
+    <div id="menu">
+      <ul>
+        <li><a href="#" (click)="GoToArticles()">Articles</a></li>
+        <li><a href="#" (click)="CreateNewArticle=true; Archives=false">New article</a></li>
+        <li><a href="#" (click)="Archives=true; CreateNewArticle=false;">Archives</a></li>
+        <li class="signout"><a [routerLink]="['Login']">SignOut</a></li>
+      </ul>
+    </div>
+
+    <div id="page">
+      <span class="badge badge-warning" *ngIf="Articles.length==0">No articles to show</span>
+
+<div class="alert alert-warning" role="alert" *ngIf="ArticleService.ArticleResult.length>0" (click)="ArticleService.ArticleResult=''">
+         {{ArticleService.ArticleResult}}        
+        </div>
+        
+      <!-- New Article -->
+      <div id="page" *ngIf="CreateNewArticle">
+        <div class="ArticleHeader">New article</div> <br />
+
+        
+
+        <div class="container">
+
+          <!-- title -->
+          <div class="row">
+            <div class="col-2">
+              Title:
+            </div>
+            <div class="col-8">
+              <!-- <input type="text" class="form-control form-control-sm" name="title"  id="title" required minlength="3" maxlength="70"/> -->
+              <input id="title" name="title" class="form-control" required minlength="3" maxlength="70"
+                [(ngModel)]="Article.title" #title="ngModel">
+              <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                <div *ngIf="title.errors.required"> Title is required. </div>
+                <div *ngIf="title.errors.minlength"> Title must be at least 3 characters long. </div>
+                <div *ngIf="title.errors.maxlength"> Title must be at most 70 characters long. </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- picture -->
+          <div class="row">
+            <div class="col-2">
+              picture:
+            </div>
+            <div class="col-8">
+              <input id="picture" name="picture" class="form-control" required [(ngModel)]="Article.picture"
+                #picture="ngModel">
+              <div *ngIf="picture.invalid && (picture.dirty || picture.touched)" class="alert alert-danger">
+                <div *ngIf="picture.errors.required"> picture is required. </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="row">
+            <div class="col-2">
+              Description:
+            </div>
+            <div class="col-8">
+              <textarea id="description" name="description" class="form-control" required minlength="3" maxlength="500" [(ngModel)]="Article.description" #description="ngModel"> </textarea>
+              <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger">
+                <div *ngIf="description.errors.required"> Description is required. </div>
+                <div *ngIf="description.errors.minlength"> Description must be at least 3 characters long. </div>
+                <div *ngIf="description.errors.maxlength"> Description must be at most 500 characters long. </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-lg btn-info" (click)="NewArticle()">Post</button>
+          <button class="btn btn-lg btn-light" (click)="CreateNewArticle=false">Cancel</button>
+        </div>
+
+      </div>
+
+
+      <!-- Article details -->
+      <div id="page" *ngIf="DetailsSelectedArticle>-1">
+        <button class="btn btn-sm btn-light" (click)="DetailsSelectedArticle=-1; EditSelectedArticle=false"> Back to articles </button>
+
+        <!-- Edit details -->
+        <div *ngIf="EditSelectedArticle">
+          <app-edit *ngIf="EditSelectedArticle"></app-edit>
+
+        </div>
+
+        <!-- Only view details -->
+        <div *ngIf="!EditSelectedArticle">
+
+          <h2 class="title"> {{ArticleDetails.title}} </h2>
+
+          <p class="meta">Posted on {{ArticleDetails.dtposted|date:'fullDate'}}</p>
+
+          <div class="container row">
+            <!-- picture -->
+            <div class="col-4">
+              <img [src]="ArticleDetails.picture" width="150px" alt="" class="alignleft border" />
+            </div>
+          
+            <!-- description -->
+            <div class="col">
+              <p> {{ArticleDetails.description}} </p>
+            </div>
+          </div>
+
+          <!-- Edit & Delete -->
+          <div>
+            <!-- delete button -->
+            <button class="btn btn-sm btn-danger" style="float: right;" data-toggle="modal" data-target="#exampleModal"
+              (click)="DeleteSelectedArticle=ArticleDetails">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path
+                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
+              </svg>
+              Delete article
+            </button>
+            &nbsp;
+
+            <!-- Edit button -->
+            <button class="btn btn-sm btn-warning" style="float: right;" 
+            (click)="EditSelectedArticle=true;ArticleService.ArticleToEdit=ArticleDetails"> 
+            <svg
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill"
+                viewBox="0 0 16 16">
+                <path
+                  d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+              </svg>
+              Edit article
+            </button>
+
+          </div>
+
+          
+
+          
+
+        </div>
+
+        
+        <button *ngIf="EditSelectedArticle" class="btn btn-sm btn-success" style="float: right;" (click)="EditArticle()"> Save </button>
+
+      </div>
+
+      
+
+      <!-- Show Articles -->
+      <div id="page" *ngIf="DetailsSelectedArticle==-1 && !CreateNewArticle && !Archives">
+        
+      <!-- Pagination -->
+      <div>
+
+        <table class="centered">
+          <tr>
+            <td *ngFor="let item of Articles | slice: (page-1) * pageSize : page * pageSize; let i=index">
+              <button class="btn btn-sm btn-info"
+                (click)="ArticlesTmp= Articles.slice((i+1) * pageSize-pageSize,(i+1) * pageSize)"> {{i+1}} </button>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <!-- Articles list -->
+        <div class="post" *ngFor="let Article of ArticlesTmp| slice: (page-1) * pageSize : page * pageSize; let i=index">
+
+          <h2 class="title" >
+            <button class="btn btn-lg btn-light" (click)="ArticleDetails=Article; DetailsSelectedArticle=i"> {{Article.title}} </button>
+          </h2>
+          <p class="meta">Posted on {{Article.dtposted | date: 'fullDate'}}</p>
+          <div class="container row">
+            <div class="col-4"> <img [src]="Article.picture" width="150px" alt="" class="alignleft border" /> </div>
+            <div class="col"> {{ (Article.description.length>200)? (Article.description | slice:0:200)+'...':(Article.description) }} </div>
+          </div>
+
+        </div>
+
+        <!-- Pagination -->
+      <div>
+
+        <table class="centered">
+          <tr>
+            <td *ngFor="let item of Articles | slice: (page-1) * pageSize : page * pageSize; let i=index">
+              <button class="btn btn-sm btn-info"
+                (click)="ArticlesTmp= Articles.slice((i+1) * pageSize-pageSize,(i+1) * pageSize)"> {{i+1}} </button>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      </div>
+
+      <!-- Archives -->
+      <div id="page" *ngIf="Archives">
+        <div class="container row">
+          <div class="col-2">Year: </div>
+          <div class="col-3">      
+            <select class="form-control" [(ngModel)]="FilterArticleYear" (change)="GetFilteredArticles()">
+              <option *ngFor="let Year of GetYearArray()">{{Year}}</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="table table-sm table-striped">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Year</th>
+              <th>Month</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Article of ArticlesTmp;let i=index">
+              <td>{{Article.title}}</td>
+              <td>{{Article.dtposted|date:'yyyy'}}</td>
+              <td>{{Article.dtposted|date:'MMMM'}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+</body>
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete the article '{{DeleteSelectedArticle?.title}}'
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="DeleteArticle(DeleteSelectedArticle?.id)">Yes</button>
+        <button type="button" class="btn btn-light" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</html>
