@@ -1,0 +1,56 @@
+
+<div class="ArticleHeader">Edit article</div> <br />
+        <div class="container">
+
+          
+          <div class="row">
+            <div class="col-2">
+              Title:
+            </div>
+            <div class="col-8">
+              
+              <input id="title" name="title" class="form-control" required minlength="3" maxlength="70"
+                [(ngModel)]="ArticleService.ArticleToEdit.title" #title="ngModel" />
+              <div *ngIf="title.invalid && (title.dirty || title.touched)" class="alert alert-danger">
+                <div *ngIf="title.errors.required"> Title is required. </div>
+                <div *ngIf="title.errors.minlength"> Title must be at least 3 characters long. </div>
+                <div *ngIf="title.errors.maxlength"> Title must be at most 70 characters long. </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-2">
+              picture:
+            </div>
+            <div class="col-8">
+              <input id="picture" name="picture" class="form-control" required [(ngModel)]="ArticleService.ArticleToEdit.picture"
+                #picture="ngModel" />
+              <div *ngIf="picture.invalid && (picture.dirty || picture.touched)" class="alert alert-danger">
+                <div *ngIf="picture.errors.required"> picture is required. </div>
+              </div>
+            </div>
+          </div>
+
+          
+          <div class="row">
+            <div class="col-2">
+              Description:
+            </div>
+            <div class="col-8">
+              <textarea id="description" name="description" class="form-control" required minlength="3" maxlength="500" [(ngModel)]="ArticleService.ArticleToEdit.description" #description="ngModel" rows="5"> </textarea>
+              <div *ngIf="description.invalid && (description.dirty || description.touched)" class="alert alert-danger">
+                <div *ngIf="description.errors.required"> Description is required. </div>
+                <div *ngIf="description.errors.minlength"> Description must be at least 3 characters long. </div>
+                <div *ngIf="description.errors.maxlength"> Description must be at most 500 characters long. </div>
+              </div>
+            </div>
+          </div>
+         
+          
+          <!-- <div >
+            <button class="btn btn-sm btn-success" style="float: right;" (click)="EditArticle()"> Save </button>
+          </div> -->
+
+        </div>
