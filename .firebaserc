@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "starry-aegis-119114"
+  },
+  "targets": {
+    "starry-aegis-119114": {
+      "hosting": {
+        "angularblog": [
+          "starry-aegis-119114"
+        ]
+      }
+    }
+  }
+}
